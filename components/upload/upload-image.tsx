@@ -3,6 +3,7 @@
 import { uploadImage } from '@/server/upload-image'
 import { useDropzone } from 'react-dropzone'
 import { Card, CardContent } from '../ui/card'
+import { cn } from '@/lib/utils'
 
 export default function UploadImage() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -23,22 +24,28 @@ export default function UploadImage() {
         //state management to create layers, set the active layer, set the image as the active layer
         const res = await uploadImage({ image: formData })
         console.log(res)
-        console.log(process.env.CLOUDINARY_NAME)
       }
     },
   })
   return (
-    <Card {...getRootProps()}>
-      <CardContent>
+    <Card
+      className={cn(
+        'hover:cursor-pointer hover:bg-secondary hover:border-rpimary transition-all ease-in-out',
+        `${isDragActive ? 'animate-pulse border-primary bg-secondary' : ''}`
+      )}
+      {...getRootProps()}
+    >
+      <CardContent className="flex flex-col h-full items-center justify-center px-2 py-24 text-xs">
         <input {...getInputProps()} type="text" />
         <div>
-          <h1>Cool animation</h1>
-          <p>
+          <p className="text-muted-foreground text-2xl">
             {isDragActive
               ? 'drop your image here!'
               : 'Start by uploading an image '}
           </p>
-          <p>Supported formats .jpeg .png .webp .jpg</p>
+          <p className="text-muted-foreground">
+            Supported formats .jpeg .png .webp .jpg
+          </p>
         </div>
       </CardContent>
     </Card>

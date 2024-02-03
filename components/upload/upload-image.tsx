@@ -37,7 +37,7 @@ export default function UploadImage() {
     >
       <CardContent className="flex flex-col h-full items-center justify-center px-2 py-24 text-xs">
         <input {...getInputProps()} type="text" />
-        <div>
+        <div className="flex items-center flex-col justify-center gap-2">
           <p className="text-muted-foreground text-2xl">
             {isDragActive
               ? 'drop your image here!'

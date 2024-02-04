@@ -14,6 +14,11 @@ export default function LayerImage({ layer }: { layer: Layer }) {
           width={50}
           height={50}
         />
+        <div>
+          <p className="text-xs">
+            {`${layer.name?.slice(0, 15)}.${layer.format} `}
+          </p>
+        </div>
       </div>
     )
 }

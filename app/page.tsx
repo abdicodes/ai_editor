@@ -19,7 +19,7 @@ export default function Home() {
       }}
     >
       <ImageStore.Provider initialValue={{ generating: false }}>
-        <main>
+        <main className="flex h-full">
           <Editor />
         </main>
       </ImageStore.Provider>

@@ -8,10 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
+import { cn } from '@/lib/utils'
+import { useImageStore } from '@/lib/image-store'
+import { Button } from '../ui/button'
+import { Layers2 } from 'lucide-react'
 
 export default function Layers() {
   const layers = useLayerStore((state) => state.layers)
   const { name, width, height } = useLayerStore((state) => state.activeLayer)
+  const generating = useImageStore((state) => state.generating)
 
   return (
     <Card
@@ -28,11 +33,17 @@ export default function Layers() {
           ) : null}
         </div>
       </CardHeader>
-      <CardContent>
-        {layers.map((layer, index) => (
-          <div key={layer.id}>
-            <div>
-              <div>
+      <CardContent className="flex-1 flex flex-col ">
+        {layers.map((layer) => (
+          <div
+            key={layer.id}
+            className={cn(
+              'cursor-pointer ease-in-out hover:bg-secondary border border-transparent',
+              { 'animate-pulse': generating }
+            )}
+          >
+            <div className="relative p-4 flex items-center">
+              <div className="flex gap-2 items-center h-8 w-full justify-between">
                 {!layer.url ? (
                   <p className="text-xs font-medium justify-self-end">
                     New Layer
@@ -43,6 +54,12 @@ export default function Layers() {
           </div>
         ))}
       </CardContent>
+      <div>
+        <Button className="w-full flex gap-2" variant={'outline'}>
+          <span>Create Layer</span>
+          <Layers2 className="text-secondary-foreground" size={18} />
+        </Button>
+      </div>
     </Card>
   )
 }

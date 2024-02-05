@@ -12,10 +12,16 @@ import { cn } from '@/lib/utils'
 import { useImageStore } from '@/lib/image-store'
 import { Button } from '../ui/button'
 import { Layers2 } from 'lucide-react'
+import LayerImage from './layer-image'
+import LayerInfo from './layer-info'
 
 export default function Layers() {
-  const layers = useLayerStore((state) => state.layers)
-  const { name, width, height } = useLayerStore((state) => state.activeLayer)
+  const { layers, setActiveLayer, addLayer, activeLayer } = useLayerStore(
+    (state) => state
+  )
+  const { name, width, height, id } = useLayerStore(
+    (state) => state.activeLayer
+  )
   const generating = useImageStore((state) => state.generating)
 
   return (
@@ -34,13 +40,19 @@ export default function Layers() {
         </div>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col ">
-        {layers.map((layer) => (
+        {layers.map((layer, index) => (
           <div
             key={layer.id}
             className={cn(
               'cursor-pointer ease-in-out hover:bg-secondary border border-transparent',
-              { 'animate-pulse': generating }
+              { 'animate-pulse': generating, 'border-primary': id === layer.id }
             )}
+            onClick={() => {
+              if (generating) return
+              setActiveLayer(layer.id)
+              console.log(layer.id)
+              console.log(activeLayer.id)
+            }}
           >
             <div className="relative p-4 flex items-center">
               <div className="flex gap-2 items-center h-8 w-full justify-between">
@@ -49,13 +61,29 @@ export default function Layers() {
                     New Layer
                   </p>
                 ) : null}
+                <LayerImage layer={layer} />
+                <LayerInfo layer={layer} layerIndex={index} />
               </div>
             </div>
           </div>
         ))}
       </CardContent>
       <div>
-        <Button className="w-full flex gap-2" variant={'outline'}>
+        <Button
+          className="w-full flex gap-2"
+          variant={'outline'}
+          onClick={() => {
+            addLayer({
+              id: crypto.randomUUID(),
+              url: '',
+              height: 0,
+              width: 0,
+              publicId: '',
+              name: '',
+              format: '',
+            })
+          }}
+        >
           <span>Create Layer</span>
           <Layers2 className="text-secondary-foreground" size={18} />
         </Button>

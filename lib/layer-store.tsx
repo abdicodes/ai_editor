@@ -53,11 +53,12 @@ const getStore = (initialState: {
           })),
 
         setActiveLayer: (id: string) =>
-          set((state) => ({
-            activeLayer: state.layers.find(
-              (e) => e.id === id || state.layers[0]
-            ),
-          })),
+          set((state) => {
+            const layer = state.layers.find((e) => e.id === id)
+            return {
+              activeLayer: layer || state.layers[0], // Fallback to the first layer if not found
+            }
+          }),
 
         activeLayer: initialState.layers[0],
 

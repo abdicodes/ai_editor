@@ -1,5 +1,6 @@
 'use client'
 
+import ActiveImage from './active-image'
 import Layers from './layers/layers'
 import { ModeToggle } from './theme/mode-toggle'
 import UploadImage from './upload/upload-image'
@@ -13,6 +14,7 @@ const Editor = () => {
         </div>
       </div>
       <UploadImage />
+      <ActiveImage />
       <Layers />
     </div>
   )

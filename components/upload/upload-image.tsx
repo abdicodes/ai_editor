@@ -4,8 +4,15 @@ import { uploadImage } from '@/server/upload-image'
 import { useDropzone } from 'react-dropzone'
 import { Card, CardContent } from '../ui/card'
 import { cn } from '@/lib/utils'
+import { useImageStore } from '@/lib/image-store'
+import { useLayerStore } from '@/lib/layer-store'
 
 export default function UploadImage() {
+  const { setGenerating } = useImageStore((state) => state)
+  const { activeLayer, updateLayer, setActiveLayer } = useLayerStore(
+    (state) => state
+  )
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: {
@@ -15,15 +22,44 @@ export default function UploadImage() {
       'image/jpeg': ['.jpeg'],
     },
     onDrop: async (acceptFiles, fileRejections) => {
-      if (fileRejections) console.log(fileRejections)
       if (acceptFiles.length) {
         const formData = new FormData()
         formData.append('image', acceptFiles[0])
-        // const objectUrl = URL.createObjectURL(acceptFiles[0])
+        const objectUrl = URL.createObjectURL(acceptFiles[0])
+        setGenerating(true)
+        updateLayer({
+          id: activeLayer.id,
+          url: objectUrl,
+          width: 0,
+          height: 0,
+          name: 'uploading',
+          publicId: '',
+          format: '',
+          resourceType: 'image',
+        })
+        setActiveLayer(activeLayer.id)
 
         //state management to create layers, set the active layer, set the image as the active layer
         const res = await uploadImage({ image: formData })
-        console.log(res)
+        if (res?.data?.success) {
+          const updatedLayer = res.data.success
+          updateLayer({
+            id: activeLayer.id,
+            url: updatedLayer.url,
+            width: updatedLayer.width,
+            height: updatedLayer.height,
+            name: updatedLayer.original_filename,
+            publicId: updatedLayer.public_id,
+            format: updatedLayer.format,
+            resourceType: updatedLayer.resource_type,
+          })
+          setActiveLayer(activeLayer.id)
+          setGenerating(false)
+        }
+
+        if (res?.data?.error) {
+          setGenerating(false)
+        }
       }
     },
   })

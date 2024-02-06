@@ -30,7 +30,9 @@ export default function LayerInfo({
           <EllipsisIcon style={{ width: 14, height: 14 }} />
         </Button>
       </DialogTrigger>
+      <DialogTitle></DialogTitle>
       <DialogContent>
+        <DialogDescription></DialogDescription>
         <h3 className="text-lg font-medium text-center mb-2">
           Layer {layer.id}
         </h3>
@@ -51,6 +53,7 @@ export default function LayerInfo({
           onClick={(e) => {
             e.stopPropagation()
             setActiveLayer(layerIndex === 0 ? layers[1].id : layers[0].id)
+            removeLayer(layer.id)
           }}
         >
           <span>Delete Layer</span>

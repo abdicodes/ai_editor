@@ -30,7 +30,7 @@ export default function Layers() {
         overflow-y-scroll scrollbar-thumb-primary scrollbar-thumb-rounded-full
         scrollbar-track-rounded-full overflow-x-hidden relative flex flex-col shadow-2xl"
     >
-      <CardHeader>
+      <CardHeader className="sticky top-0 z-50 px-4 py-6 min-h-24 bg-card shadow-sm">
         <div>
           <CardTitle className="text-sm">{name || 'Layers'}</CardTitle>
 
@@ -45,13 +45,14 @@ export default function Layers() {
             key={layer.id}
             className={cn(
               'cursor-pointer ease-in-out hover:bg-secondary border border-transparent',
-              { 'animate-pulse': generating, 'border-primary': id === layer.id }
+              {
+                'animate-pulse': generating,
+                'border-primary rounded-lg ': id === layer.id,
+              }
             )}
             onClick={() => {
               if (generating) return
               setActiveLayer(layer.id)
-              console.log(layer.id)
-              console.log(activeLayer.id)
             }}
           >
             <div className="relative p-4 flex items-center">
